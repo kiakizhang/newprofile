@@ -16,6 +16,7 @@ images = {
     "__IMG_logo_tencent__": ("assets/logos/tencent.png", "image/png"),
     "__IMG_logo_weipai__": ("assets/logos/weipai.png", "image/png"),
     "__IMG_logo_presence__": ("assets/logos/presence.png", "image/png"),
+    "__FONT_script__": ("assets/greet.woff2", "font/woff2"),
 }
 
 for token, (rel, mime) in images.items():

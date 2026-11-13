@@ -150,6 +150,13 @@ body.is-ready .spotlight{opacity:1}
   background:linear-gradient(to right,rgba(0,0,0,.45),transparent 16%,transparent 84%,rgba(0,0,0,.45)),
     linear-gradient(to bottom,transparent 60%,rgba(0,0,0,.35));}
 
+/* Sacramento (OFL 1.1) — "Copyright (c) 2012 Brian J. Bonislawsky DBA Astigmatic (AOETI)", subset to the greeting glyphs */
+@font-face{
+  font-family:"Greet Pen";
+  src:url(__FONT_script__) format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+
 /* floating work cards — 3D conveyor belt */
 @property --p{syntax:'<number>';inherits:true;initial-value:0}
 .belt{
@@ -249,6 +256,9 @@ body.is-static .belt{animation-play-state:paused!important}
   background:radial-gradient(ellipse,rgba(0,0,0,.75),transparent 70%);filter:blur(14px);z-index:-1;
 }
 
+/* handwritten greeting — desktop only, painted behind the cutout portrait */
+.greet{display:none}
+
 /* hero copy */
 .hero-grid{position:absolute;inset:0;z-index:4;pointer-events:none}
 .copy{position:absolute;left:clamp(20px,3.2vw,46px);bottom:104px;pointer-events:auto;max-width:min(34vw,380px)}
@@ -316,6 +326,66 @@ body.is-ready .quote{animation:fadeUp 1.2s var(--ease) 1.2s forwards}
 .sig{
   font-family:var(--sans);font-style:normal;font-weight:600;font-size:20px;
   color:rgba(242,239,232,.42);margin-top:2px;display:block;letter-spacing:.02em;
+}
+
+/* ---------- desktop hero: title on top, handwritten greeting ---------- */
+@media (min-width:901px){
+  .copy{
+    left:0;right:0;top:96px;bottom:auto;margin-inline:auto;
+    width:max-content;max-width:none;text-align:center;
+  }
+  .eyebrow{justify-content:center;margin-bottom:14px}
+  h1{
+    display:flex;justify-content:center;align-items:flex-start;gap:.3em;
+    white-space:nowrap;font-size:clamp(38px,4.25vw,62px);
+  }
+  h1 .l{display:block}
+  .sub{margin-top:16px}
+
+  .portrait{position:relative;z-index:1}
+
+  .greet{
+    display:block;position:absolute;right:calc(100% - 30px);bottom:104px;z-index:0;
+    pointer-events:none;white-space:nowrap;
+    font-family:"Greet Pen","Snell Roundhand","Brush Script MT",cursive;
+    font-size:clamp(38px,4.9vw,70px);line-height:1;letter-spacing:.005em;
+    transform:rotate(-4.5deg);transform-origin:100% 82%;
+  }
+  .greet-clip{
+    display:block;opacity:0;
+    -webkit-clip-path:inset(0 100% 0 0);clip-path:inset(0 100% 0 0);
+    animation:greetWipe 8.6s cubic-bezier(.36,.03,.28,1) infinite,
+              greetFade 8.6s linear infinite;
+    filter:drop-shadow(0 0 15px rgba(255,196,231,.16));
+  }
+  .greet-txt{
+    display:block;padding:0 .06em .18em 0;
+    background:linear-gradient(94deg,#ffb27a 0%,#ff8ab8 17%,#d59bff 39%,#93b6ff 61%,#6fe3d6 83%,#b9ffcf 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .greet-pen{
+    position:absolute;left:0;bottom:30%;width:7px;height:7px;border-radius:50%;
+    background:radial-gradient(circle,#fff 0,rgba(255,236,246,.9) 38%,rgba(255,198,230,0) 72%);
+    opacity:0;transform:translate(-50%,50%);
+    animation:greetPenMove 8.6s cubic-bezier(.36,.03,.28,1) infinite,
+              greetPenFade 8.6s linear infinite;
+  }
+  @keyframes greetWipe{
+    0%{clip-path:inset(0 100% 0 0);-webkit-clip-path:inset(0 100% 0 0)}
+    45%,90%{clip-path:inset(0 0 0 0);-webkit-clip-path:inset(0 0 0 0)}
+    91%,100%{clip-path:inset(0 100% 0 0);-webkit-clip-path:inset(0 100% 0 0)}
+  }
+  @keyframes greetFade{
+    0%{opacity:0}
+    2%,84%{opacity:1}
+    90%,100%{opacity:0}
+  }
+  @keyframes greetPenMove{0%{left:0}45%,100%{left:100%}}
+  @keyframes greetPenFade{
+    0%,3%{opacity:0}
+    5%,41%{opacity:.95}
+    45%,100%{opacity:0}
+  }
 }
 
 /* drag hint */
@@ -849,10 +919,14 @@ body.is-static .thought-feature::after,body.is-static .thought-card::after{anima
 }
 body.is-static .cursor-dot,body.is-static .cursor-ring,body.is-static .edge-scroll{display:none}
 body.is-static *,body.is-static *::before,body.is-static *::after{animation-delay:0s !important;animation-duration:.01s !important;transition-duration:.01s !important}
+body.is-static .greet-clip{opacity:1;clip-path:none;-webkit-clip-path:none;animation:none}
+body.is-static .greet-pen{display:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
   .reveal{opacity:1;transform:none}
   .card,.portrait,.sub,.cta,.quote,.ticker{opacity:1 !important;transform:none !important;filter:none !important}
+  .greet-clip{opacity:1 !important;clip-path:none !important;-webkit-clip-path:none !important;animation:none !important}
+  .greet-pen{display:none}
   h1 .l>span{transform:none}
 }
 </style>
@@ -931,6 +1005,10 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
     <div class="orbit" aria-hidden="true"></div>
     <div class="halo" aria-hidden="true"></div>
     <div class="portrait-wrap" id="portraitWrap">
+      <span class="greet" aria-hidden="true">
+        <span class="greet-clip"><span class="greet-txt">Hello, I'm Kiaki</span></span>
+        <i class="greet-pen"></i>
+      </span>
       <img class="portrait" src="__IMG_portrait__" alt="张琪（kiaki）的插画头像" width="760" height="819">
     </div>
   </div>
