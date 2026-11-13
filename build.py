@@ -5,13 +5,13 @@ root = pathlib.Path(__file__).parent
 tpl = (root / "template.html").read_text(encoding="utf-8")
 
 images = {
-    "__IMG_portrait__": ("assets/portrait.png", "image/png"),
-    "__IMG_hackathon__": ("assets/hackathon.jpg", "image/jpeg"),
-    "__IMG_ckj__": ("assets/ckj.jpg", "image/jpeg"),
-    "__IMG_speech__": ("assets/speech.jpg", "image/jpeg"),
-    "__IMG_visionpro__": ("assets/visionpro.jpg", "image/jpeg"),
-    "__IMG_ry__": ("assets/ry.jpg", "image/jpeg"),
-    "__IMG_AIcreators__": ("assets/AI-creators.jpg", "image/jpeg"),
+    "__IMG_portrait__": ("assets/portrait.webp", "image/webp"),
+    "__IMG_hackathon__": ("assets/hackathon.webp", "image/webp"),
+    "__IMG_ckj__": ("assets/ckj.webp", "image/webp"),
+    "__IMG_speech__": ("assets/speech.webp", "image/webp"),
+    "__IMG_visionpro__": ("assets/visionpro.webp", "image/webp"),
+    "__IMG_ry__": ("assets/ry.webp", "image/webp"),
+    "__IMG_AIcreators__": ("assets/AI-creators.webp", "image/webp"),
     "__IMG_logo_mengma__": ("assets/logos/mengma.png", "image/png"),
     "__IMG_logo_tencent__": ("assets/logos/tencent.png", "image/png"),
     "__IMG_logo_weipai__": ("assets/logos/weipai.png", "image/png"),

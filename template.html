@@ -532,6 +532,9 @@ body.is-ready .ticker{animation:fadeIn 1.2s ease 1.5s forwards}
 .job-detail ul::-webkit-scrollbar{display:none}
 .job-detail li{text-wrap:pretty;position:relative;padding-left:16px;font-size:13.5px;line-height:1.7;color:rgba(242,239,232,.76)}
 .job-detail li::before{content:"";position:absolute;left:0;top:.74em;width:5px;height:5px;border-radius:50%;background:var(--dot,#d8c09a);opacity:.7}
+/* collapsible wrapper: inert on desktop, animated on touch layouts */
+.job-body{display:contents}
+.job-cta{display:none}
 .job-ghost{
   position:absolute;right:16px;bottom:8px;font-family:var(--serif);font-size:120px;line-height:.8;
   color:rgba(242,239,232,.035);pointer-events:none;transition:opacity .6s;
@@ -707,8 +710,7 @@ body.is-static .job::after,body.is-static .honor::after,
 body.is-static .thought-feature::after,body.is-static .thought-card::after{animation:none}
 
 @media (pointer:coarse){
-  html{scroll-snap-type:y proximity;scroll-padding-top:88px}
-  main > section{scroll-snap-align:start}
+  html{scroll-padding-top:88px}
 }
 
 /* ============ responsive ============ */
@@ -750,7 +752,7 @@ body.is-static .thought-feature::after,body.is-static .thought-card::after{anima
   .cta-arrow{width:30px;height:30px}
   .stage{position:relative;left:auto;right:auto;bottom:auto;order:3;margin:4px -20px 0}
   .portrait-wrap{padding-bottom:0}
-  .portrait{height:clamp(240px,33vh,360px)}
+  .portrait{height:clamp(196px,26vh,286px)}
   .orbit{width:96vw;top:46%}
   .halo{width:120vw;height:86%}
   .quote{position:relative;right:auto;bottom:auto;width:100%;text-align:left;margin-top:26px;order:4}
@@ -763,10 +765,15 @@ body.is-static .thought-feature::after,body.is-static .thought-card::after{anima
   .ticker-item{font-size:8.5px;letter-spacing:.18em;gap:16px;padding:0 16px}
   .belt{position:relative;left:auto;right:auto;top:auto;bottom:auto;order:2;
     height:clamp(150px,19vh,200px);margin:8px -20px 0;--R:52vw;--arc:40px;
+    animation:none;touch-action:pan-y;
     -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);
     mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%)}
   .card{width:clamp(132px,32vw,176px)}
   .card img{filter:grayscale(.5) brightness(.8)}
+  .card figcaption{flex-direction:column;align-items:flex-start;gap:2px;
+    padding:22px 10px 8px;font-size:9px;line-height:1.35}
+  .card figcaption span:first-child{white-space:normal;text-wrap:pretty}
+  .card figcaption span:last-child{font-size:8px;letter-spacing:.1em}
   .quote cite{font-size:8.5px}
   .about-intro{align-items:flex-start;text-align:left;margin-bottom:34px}
   .about-intro .lead{text-align:left;max-width:none;margin-top:18px}
@@ -775,10 +782,35 @@ body.is-static .thought-feature::after,body.is-static .thought-card::after{anima
   .career-head{align-items:flex-start;gap:18px}
   .career-hint{display:none}
   .career-row{display:block;height:auto}
-  .job{display:block;height:auto;margin-bottom:12px;padding:22px}
+  .job{display:block;height:auto;margin-bottom:12px;padding:22px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    border-color:rgba(255,255,255,.115);
+    box-shadow:0 18px 38px -30px rgba(0,0,0,.95),0 1px 0 rgba(255,255,255,.05) inset;
+    transition:border-color .5s ease,box-shadow .55s var(--ease),transform .45s var(--ease)}
+  .job:active{transform:scale(.994)}
+  .job.is-open{border-color:rgba(255,255,255,.2);
+    box-shadow:0 30px 64px -36px #000,0 0 0 1px rgba(255,255,255,.05) inset}
   .job-summary{margin-top:24px}
   .job-sub{max-width:none}
   .job-more,.job-ghost{display:none}
+  .job::after{display:none}
+  .job-body{display:block;height:0;overflow:hidden;opacity:0;
+    transition:height .46s cubic-bezier(.22,.61,.36,1),opacity .3s ease}
+  .job.is-open .job-body{opacity:1}
+  .job-cta{display:inline-flex;align-items:center;gap:8px;margin-top:16px;
+    font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,239,232,.42)}
+  .job-cta i{position:relative;display:block;flex:none;width:13px;height:13px;
+    border:1px solid rgba(242,239,232,.26);border-radius:50%;
+    transition:transform .45s var(--ease),border-color .4s}
+  .job-cta i::before,.job-cta i::after{content:"";position:absolute;left:50%;top:50%;
+    background:rgba(242,239,232,.6);transform:translate(-50%,-50%)}
+  .job-cta i::before{width:7px;height:1px}
+  .job-cta i::after{width:1px;height:7px}
+  .job.is-open .job-cta i{transform:rotate(45deg);border-color:rgba(242,239,232,.45)}
+  .job-cta .t-close{display:none}
+  .job.is-open .job-cta .t-open{display:none}
+  .job.is-open .job-cta .t-close{display:inline}
+  .job-presence{margin-top:18px;padding-top:16px}
   .job-detail{position:static;opacity:1;translate:none;margin-top:22px;padding-top:18px}
   .job-detail ul{max-height:none}
   .honors-grid{grid-template-columns:1fr;gap:34px}
@@ -899,7 +931,7 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
     <div class="orbit" aria-hidden="true"></div>
     <div class="halo" aria-hidden="true"></div>
     <div class="portrait-wrap" id="portraitWrap">
-      <img class="portrait" src="__IMG_portrait__" alt="张琪（kiaki）的插画头像" width="1000" height="1078">
+      <img class="portrait" src="__IMG_portrait__" alt="张琪（kiaki）的插画头像" width="760" height="819">
     </div>
   </div>
 
@@ -1027,15 +1059,18 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
         <div class="job-summary">
           <h3>临场感科技</h3>
           <span class="job-company">Presence</span>
-          <p class="job-role">社交产品经理</p>
+          <span class="job-cta" aria-hidden="true"><i></i><b class="t-open">展开详情</b><b class="t-close">收起</b></span>
         </div>
-        <ul class="job-presence" aria-label="核心方向">
-          <li>出海 AI</li>
-          <li>产品矩阵操盘</li>
-          <li>上架合规体系</li>
-          <li>付费与留存设计</li>
-          <li>AI 驱动提效</li>
-        </ul>
+        <div class="job-body">
+          <p class="job-role">社交产品经理</p>
+          <ul class="job-presence" aria-label="核心方向">
+            <li>出海 AI</li>
+            <li>产品矩阵操盘</li>
+            <li>上架合规体系</li>
+            <li>付费与留存设计</li>
+            <li>AI 驱动提效</li>
+          </ul>
+        </div>
         <span class="job-ghost" aria-hidden="true">01</span>
       </article>
 
@@ -1047,11 +1082,12 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
         <div class="job-summary">
           <h3>梦马智能</h3>
           <span class="job-company">海外百万级 AI 社交产品</span>
+          <span class="job-cta" aria-hidden="true"><i></i><b class="t-open">展开详情</b><b class="t-close">收起</b></span>
+        </div>
+        <div class="job-body">
           <p class="job-role">AI 策略产品</p>
           <p class="job-sub">洞察与解构用户需求｜抽象产品方案｜A/B 思维｜AI 优化提效</p>
-        </div>
-        <span class="job-more"><b>+</b>悬浮查看详情</span>
-        <div class="job-detail">
+          <div class="job-detail">
           <p class="job-tech"><span>技术关键</span>模型 Prompt 工程与能力评估</p>
           <ul>
             <li>0-1 搭建舆情监控平台：沉淀运营监控 SOP，做数据抓取与看板，提升运营效率</li>
@@ -1059,7 +1095,9 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
             <li>Prompt 专项：提示词调优与效果评估，多轮测试归因；推进提示词缓存、token 压缩，基于线上数据持续迭代稳定性</li>
             <li>海外本地化与增长：跟进东南亚支付本地化；制定测试 / ASO 策略；建立多地区用户反馈与 bug 闭环</li>
           </ul>
+          </div>
         </div>
+        <span class="job-more"><b>+</b>悬浮查看详情</span>
         <span class="job-ghost" aria-hidden="true">02</span>
       </article>
 
@@ -1071,11 +1109,12 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
         <div class="job-summary">
           <h3>腾讯</h3>
           <span class="job-company">HR 智能问询 / 质检 / 大模型平台</span>
+          <span class="job-cta" aria-hidden="true"><i></i><b class="t-open">展开详情</b><b class="t-close">收起</b></span>
+        </div>
+        <div class="job-body">
           <p class="job-role">产品策划</p>
           <p class="job-sub">AI 问询 / 坐席质检｜大模型平台接入｜数据权限｜质检标签</p>
-        </div>
-        <span class="job-more"><b>+</b>悬浮查看详情</span>
-        <div class="job-detail">
+          <div class="job-detail">
           <p class="job-tech"><span>技术关键</span>意图识别 / 召回 / 生成链路｜质检｜分级流转｜后台权限</p>
           <ul>
             <li>HR 智能问询助手「小T」：0-1 结合 mcp 方案拓展问询场景，提升员工自助效率</li>
@@ -1084,7 +1123,9 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
             <li>数据治理：参与 IT 系统升级与流程梳理，形成数据链路 / 接口规范，交付多份报表需求对接</li>
             <li>探索 AI 辅助产品工作流与 Agent 能力落地，形成可复用方法论</li>
           </ul>
+          </div>
         </div>
+        <span class="job-more"><b>+</b>悬浮查看详情</span>
         <span class="job-ghost" aria-hidden="true">03</span>
       </article>
 
@@ -1096,11 +1137,12 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
         <div class="job-summary">
           <h3>微派会玩</h3>
           <span class="job-company">ToC 社交陪伴 · 真人语音房</span>
+          <span class="job-cta" aria-hidden="true"><i></i><b class="t-open">展开详情</b><b class="t-close">收起</b></span>
+        </div>
+        <div class="job-body">
           <p class="job-role">AI 产品经理</p>
           <p class="job-sub">ToC 社交陪伴｜真人语音房｜Prompt 策略｜RAG / Query｜异常兜底</p>
-        </div>
-        <span class="job-more"><b>+</b>悬浮查看详情</span>
-        <div class="job-detail">
+          <div class="job-detail">
           <p class="job-tech"><span>技术关键</span>A/B 实验｜Badcase 闭环｜对话策略与节奏设计</p>
           <ul>
             <li>模型链路与体验优化：梳理引导步骤与复杂策略，建立评估标准并推进迭代</li>
@@ -1108,7 +1150,9 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
             <li>效果建设与增强：搭建 RAG / Query 方案，结合场景化精调，提升对话质量与留存表现</li>
             <li>基于线上反馈与 Badcase 沉淀持续迭代，完善异常兜底与对话策略</li>
           </ul>
+          </div>
         </div>
+        <span class="job-more"><b>+</b>悬浮查看详情</span>
         <span class="job-ghost" aria-hidden="true">04</span>
       </article>
     </div>
@@ -1323,6 +1367,7 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
     // the 3D/custom-property transforms make native hover hit-testing unreliable,
     // so pick the front-most card under the pointer from its projected box.
     belt.addEventListener('pointermove',e=>{
+      if(e.pointerType&&e.pointerType!=='mouse')return;
       const x=e.clientX,y=e.clientY;
       let best=null,score=-1;
       for(const el of beltCards){
@@ -1558,7 +1603,200 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
       e.preventDefault();
       if(!paging) pageStep(dir);
     });
+    /* touch: the drag follows the finger, the release snaps one page (no native momentum) */
+    const rootEl=document.documentElement;
+    let tY=0,tX=0,tTop=0,tLive=false,tLocked=false,tBeh='';
+    addEventListener('touchstart',e=>{
+      tLive=false;tLocked=false;
+      if(paging||e.touches.length!==1) return;
+      if(body.classList.contains('menu-open')) return;
+      if(scrollableUnder(e.target)) return;
+      tY=e.touches[0].clientY;tX=e.touches[0].clientX;tTop=scrollY;
+      tBeh=rootEl.style.scrollBehavior;
+      tLive=true;
+    },{passive:true});
+    addEventListener('touchmove',e=>{
+      if(!tLive||e.touches.length!==1) return;
+      const dy=e.touches[0].clientY-tY,dx=e.touches[0].clientX-tX;
+      if(!tLocked){
+        if(Math.abs(dy)<7&&Math.abs(dx)<7) return;
+        if(Math.abs(dx)>Math.abs(dy)){tLive=false;return;}   // horizontal gestures belong to the belt
+        tLocked=true;
+        rootEl.style.scrollBehavior='auto';
+      }
+      if(e.cancelable) e.preventDefault();
+      const max=rootEl.scrollHeight-innerHeight;
+      rootEl.scrollTop=Math.max(0,Math.min(max,tTop-dy));
+    },{passive:false});
+    const endTouch=e=>{
+      if(!tLive) return;
+      tLive=false;
+      const restore=()=>{rootEl.style.scrollBehavior=tBeh;};
+      if(!tLocked){restore();return;}
+      const dy=(e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientY:tY)-tY;
+      buildPages();
+      const dir=dy<0?1:-1;
+      let target=null;
+      if(dir>0){for(const pg of pages){if(pg>tTop+8){target=pg;break;}}}
+      else{for(let i=pages.length-1;i>=0;i--){if(pages[i]<tTop-8){target=pages[i];break;}}}
+      if(target==null) target=dir>0?pages[pages.length-1]:0;
+      setTimeout(restore,900);
+      pageTo(target);
+    };
+    addEventListener('touchend',endTouch,{passive:true});
+    addEventListener('touchcancel',endTouch,{passive:true});
   }
+
+  /* ---------- mobile: swipeable hero belt + tap-to-open career cards ---------- */
+  const mqMobile=matchMedia('(max-width:900px)');
+
+  if(belt&&beltTrack){
+    const beltCards=$$('.card',beltTrack);
+    const n=beltCards.length||1;
+    let bp=0,drift=null,anim=null,hot=null,lastT=0,inView=true;
+    const put=v=>{bp=v;belt.style.setProperty('--p',v.toFixed(5));};
+    const setHot=el=>{
+      if(hot===el)return;
+      beltCards.forEach(c=>c.classList.remove('is-hot'));
+      hot=el;
+      if(el)el.classList.add('is-hot');
+      belt.classList.toggle('is-hot',!!el);
+    };
+    const front=()=>{
+      const k=Math.round(bp*n),r=((k%n)+n)%n;
+      return beltCards[(n-r)%n]||null;
+    };
+    const startDrift=()=>{
+      if(!mqMobile.matches||reduce||params.has('static')||drift)return;
+      lastT=0;
+      drift=requestAnimationFrame(function step(t){
+        if(!lastT)lastT=t;
+        const dt=Math.min(64,t-lastT);lastT=t;
+        if(inView)put(bp+dt/150000);
+        drift=requestAnimationFrame(step);
+      });
+    };
+    const stopDrift=()=>{if(drift){cancelAnimationFrame(drift);drift=null;}};
+    const tween=(target,dur,done)=>{
+      if(anim)cancelAnimationFrame(anim);
+      const from=bp,t0=performance.now();
+      anim=requestAnimationFrame(function step(t){
+        const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);
+        put(from+(target-from)*e);
+        if(k<1)anim=requestAnimationFrame(step);
+        else{anim=null;if(done)done();}
+      });
+    };
+    const hitTest=(x,y)=>{
+      let best=null,score=-1;
+      for(const el of beltCards){
+        const r=el.getBoundingClientRect();
+        if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){
+          const o=parseFloat(getComputedStyle(el).opacity)||0;
+          if(o>score){score=o;best=el;}
+        }
+      }
+      return best;
+    };
+    const centerOn=el=>{
+      const i=beltCards.indexOf(el);if(i<0)return;
+      let d=(((-i/n-bp)%1)+1)%1;
+      if(d>.5)d-=1;
+      tween(bp+d,420,()=>setHot(el));
+    };
+    const settle=()=>tween(Math.round(bp*n)/n,360,()=>setHot(front()));
+    let dragging=false,axis=null,moved=false,sx=0,sy=0,sp=0;
+
+    belt.addEventListener('touchstart',e=>{
+      if(!mqMobile.matches||e.touches.length!==1)return;
+      stopDrift();
+      if(anim){cancelAnimationFrame(anim);anim=null;}
+      dragging=true;axis=null;moved=false;
+      sx=e.touches[0].clientX;sy=e.touches[0].clientY;sp=bp;
+    },{passive:true});
+    belt.addEventListener('touchmove',e=>{
+      if(!dragging||e.touches.length!==1)return;
+      const dx=e.touches[0].clientX-sx,dy=e.touches[0].clientY-sy;
+      if(!axis){
+        if(Math.abs(dx)<7&&Math.abs(dy)<7)return;
+        axis=Math.abs(dx)>Math.abs(dy)*1.15?'x':'y';
+        if(axis==='y'){dragging=false;return;}
+      }
+      if(axis!=='x')return;
+      moved=true;
+      put(sp+dx/(innerWidth*2.4));
+    },{passive:true});
+    belt.addEventListener('touchend',e=>{
+      if(!dragging)return;
+      dragging=false;
+      if(!moved){
+        const t=e.changedTouches[0],hit=hitTest(t.clientX,t.clientY);
+        if(hit){hot===hit?setHot(null):centerOn(hit);}
+        return;
+      }
+      settle();
+    },{passive:true});
+    belt.addEventListener('touchcancel',()=>{
+      if(!dragging)return;
+      dragging=false;settle();
+    },{passive:true});
+
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(es=>{inView=es[0].isIntersecting;},{threshold:0}).observe(belt);
+    }
+    if(mqMobile.matches)startDrift();
+
+    mqMobile.addEventListener('change',e=>{
+      if(e.matches){startDrift();}
+      else{
+        stopDrift();
+        if(anim){cancelAnimationFrame(anim);anim=null;}
+        belt.style.removeProperty('--p');bp=0;
+        setHot(null);
+      }
+    });
+  }
+
+  /* career cards: tap to expand / collapse on phones */
+  const jobEls=$$('.job');
+  const jobBodyOf=job=>job.querySelector('.job-body');
+  const setJob=(job,open)=>{
+    const b=jobBodyOf(job);if(!b)return;
+    clearTimeout(b._settle);
+    b.style.height=b.getBoundingClientRect().height+'px';
+    void b.offsetHeight;
+    job.classList.toggle('is-open',open);
+    b.style.height=(open?b.scrollHeight:0)+'px';
+    job.setAttribute('aria-expanded',String(open));
+    if(open)b._settle=setTimeout(()=>{b.style.height='auto';buildPages();},520);
+  };
+  const resetJobs=()=>{
+    jobEls.forEach(job=>{
+      const b=jobBodyOf(job);
+      job.classList.remove('is-open');
+      if(b){clearTimeout(b._settle);b.style.height='';}
+      if(mqMobile.matches){job.setAttribute('role','button');job.setAttribute('aria-expanded','false');}
+      else{job.removeAttribute('role');job.removeAttribute('aria-expanded');}
+    });
+    buildPages();
+  };
+  jobEls.forEach(job=>{
+    job.addEventListener('click',e=>{
+      if(!mqMobile.matches||e.target.closest('a'))return;
+      setJob(job,!job.classList.contains('is-open'));
+      buildPages();
+    });
+    job.addEventListener('keydown',e=>{
+      if(!mqMobile.matches)return;
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        setJob(job,!job.classList.contains('is-open'));
+        buildPages();
+      }
+    });
+  });
+  resetJobs();
+  mqMobile.addEventListener('change',resetJobs);
 
   /* ---------- scroll cue + hero exit ---------- */
   let heroTicking=false;
