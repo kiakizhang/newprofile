@@ -237,18 +237,12 @@ body.is-static .belt{animation-play-state:paused!important}
 @keyframes breathe{0%,100%{opacity:.75;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.05)}}
 .portrait-wrap{
   position:relative;display:flex;justify-content:center;align-items:flex-end;
-  padding-bottom:40px;will-change:transform;
+  padding-bottom:40px;
 }
 .portrait{
   height:clamp(300px,46vh,470px);width:auto;
-  opacity:0;transform:translateY(50px) scale(1.03);filter:blur(12px);
-  filter:drop-shadow(0 40px 70px rgba(0,0,0,.65)) saturate(1.04) contrast(1.02);
-  transition:filter .6s ease;
-  -webkit-mask-image:linear-gradient(to bottom,#000 90%,rgba(0,0,0,.82) 95%,rgba(0,0,0,0) 100%);
-  mask-image:linear-gradient(to bottom,#000 90%,rgba(0,0,0,.82) 95%,rgba(0,0,0,0) 100%);
+  opacity:1;transform:none;filter:none;
 }
-body.is-ready .portrait{animation:portraitIn 1.6s var(--ease) .3s forwards}
-@keyframes portraitIn{to{opacity:1;transform:translateY(0) scale(1);filter:blur(0) drop-shadow(0 40px 70px rgba(0,0,0,.65)) saturate(1.04) contrast(1.02)}}
 .portrait-wrap::after{
   content:"";position:absolute;left:50%;bottom:20px;width:72%;height:60px;
   transform:translateX(-50%);border-radius:50%;
@@ -797,16 +791,18 @@ body.is-static .thought-feature::after,body.is-static .thought-card::after{anima
   .job-body{display:block;height:0;overflow:hidden;opacity:0;
     transition:height .46s cubic-bezier(.22,.61,.36,1),opacity .3s ease}
   .job.is-open .job-body{opacity:1}
-  .job-cta{display:inline-flex;align-items:center;gap:8px;margin-top:16px;
-    font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,239,232,.42)}
-  .job-cta i{position:relative;display:block;flex:none;width:13px;height:13px;
-    border:1px solid rgba(242,239,232,.26);border-radius:50%;
-    transition:transform .45s var(--ease),border-color .4s}
-  .job-cta i::before,.job-cta i::after{content:"";position:absolute;left:50%;top:50%;
-    background:rgba(242,239,232,.6);transform:translate(-50%,-50%)}
-  .job-cta i::before{width:7px;height:1px}
-  .job-cta i::after{width:1px;height:7px}
-  .job.is-open .job-cta i{transform:rotate(45deg);border-color:rgba(242,239,232,.45)}
+  .job-cta{display:inline-flex;align-items:center;gap:9px;margin-top:18px;
+    padding:7px 13px 7px 14px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);
+    font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,239,232,.6);
+    transition:background .4s ease,border-color .4s ease,color .4s ease}
+  .job.is-open .job-cta{background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.17);
+    color:rgba(242,239,232,.8)}
+  .job-cta i{display:block;flex:none;width:7px;height:7px;margin-top:-3px;
+    border-right:1px solid currentColor;border-bottom:1px solid currentColor;
+    transform:rotate(45deg);
+    transition:transform .42s var(--ease),margin .42s var(--ease)}
+  .job.is-open .job-cta i{transform:rotate(-135deg);margin-top:3px}
   .job-cta .t-close{display:none}
   .job.is-open .job-cta .t-open{display:none}
   .job.is-open .job-cta .t-close{display:inline}
@@ -1059,7 +1055,7 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
         <div class="job-summary">
           <h3>临场感科技</h3>
           <span class="job-company">Presence</span>
-          <span class="job-cta" aria-hidden="true"><i></i><b class="t-open">展开详情</b><b class="t-close">收起</b></span>
+          <span class="job-cta" aria-hidden="true"><b class="t-open">展开详情</b><b class="t-close">收起</b><i></i></span>
         </div>
         <div class="job-body">
           <p class="job-role">社交产品经理</p>
@@ -1082,7 +1078,7 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
         <div class="job-summary">
           <h3>梦马智能</h3>
           <span class="job-company">海外百万级 AI 社交产品</span>
-          <span class="job-cta" aria-hidden="true"><i></i><b class="t-open">展开详情</b><b class="t-close">收起</b></span>
+          <span class="job-cta" aria-hidden="true"><b class="t-open">展开详情</b><b class="t-close">收起</b><i></i></span>
         </div>
         <div class="job-body">
           <p class="job-role">AI 策略产品</p>
@@ -1109,7 +1105,7 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
         <div class="job-summary">
           <h3>腾讯</h3>
           <span class="job-company">HR 智能问询 / 质检 / 大模型平台</span>
-          <span class="job-cta" aria-hidden="true"><i></i><b class="t-open">展开详情</b><b class="t-close">收起</b></span>
+          <span class="job-cta" aria-hidden="true"><b class="t-open">展开详情</b><b class="t-close">收起</b><i></i></span>
         </div>
         <div class="job-body">
           <p class="job-role">产品策划</p>
@@ -1137,7 +1133,7 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
         <div class="job-summary">
           <h3>微派会玩</h3>
           <span class="job-company">ToC 社交陪伴 · 真人语音房</span>
-          <span class="job-cta" aria-hidden="true"><i></i><b class="t-open">展开详情</b><b class="t-close">收起</b></span>
+          <span class="job-cta" aria-hidden="true"><b class="t-open">展开详情</b><b class="t-close">收起</b><i></i></span>
         </div>
         <div class="job-body">
           <p class="job-role">AI 产品经理</p>
@@ -1407,7 +1403,7 @@ body.is-static *,body.is-static *::before,body.is-static *::after{animation-dela
       belt.style.setProperty('--my',pointer.y.toFixed(3));
     }
 
-    if(portraitWrap){
+    if(portraitWrap&&innerWidth>900){
       portraitWrap.style.transform=`translate3d(${(pointer.x*12).toFixed(2)}px,${(pointer.y*9-sy*.06).toFixed(2)}px,0)`;
     }
 
