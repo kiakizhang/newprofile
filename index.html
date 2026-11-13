@@ -304,9 +304,10 @@ body.is-ready .cta{animation:fadeUp 1s var(--ease) 1.1s forwards}
   }
   .eyebrow{justify-content:center;margin-bottom:14px}
   h1{
-    display:flex;justify-content:center;align-items:flex-start;gap:.3em;
+    display:flex;justify-content:center;align-items:baseline;gap:.3em;
     white-space:nowrap;font-size:clamp(38px,4.25vw,62px);
   }
+  h1 em{font-size:.9em}
   h1 .l{display:block}
 
   .portrait{position:relative;z-index:1}
@@ -314,12 +315,15 @@ body.is-ready .cta{animation:fadeUp 1s var(--ease) 1.1s forwards}
   .greet{
     display:block;position:absolute;bottom:104px;z-index:0;
     width:auto;height:clamp(46px,5.6vw,84px);overflow:visible;
-    pointer-events:none;
+    pointer-events:none;opacity:.76;
     filter:drop-shadow(0 0 14px rgba(255,196,231,.14));
   }
   .greet-l{right:calc(100% - 4px)}
   .greet-r{left:calc(100% - 2px)}
   .greet-tip{filter:drop-shadow(0 0 2.6px rgba(255,228,244,.95))}
+}
+@media (min-width:1100px){
+  .greet{height:clamp(54px,6.6vw,96px)}
 }
 
 /* drag hint */
@@ -1387,14 +1391,15 @@ body.is-static .greet-tip{display:none}
     const svgs=$$('.greet');
     if(!svgs.length||params.has('static')||reduce)return;
     const greetMQ=window.matchMedia('(min-width:901px)');
-    const SPEED=185,GAP=26,HOLD=2600,FADE=760;
+    const SPEED=300,GAP=20,HOLD=2600,FADE=760;
     const wrap=$('#portraitWrap');
     let items=[],D=0,CYCLE=0,built=false,running=false;
     let elapsed=-420,last=0,prev=0,visible=true;
+    const BASE=.76;
     const reset=()=>{
       items.forEach(it=>{it.p.style.strokeDashoffset='1'});
       svgs.forEach(s=>{
-        s.style.opacity='1';
+        s.style.opacity=String(BASE);
         const t=s.querySelector('.greet-tip');
         if(t)t.style.opacity='0';
       });
@@ -1432,7 +1437,7 @@ body.is-static .greet-tip{display:none}
           active={it,k};
         }
       }
-      svgs.forEach(s=>{s.style.opacity='1'});
+      svgs.forEach(s=>{s.style.opacity=String(BASE)});
       svgs.forEach(s=>{
         const tp=s.querySelector('.greet-tip');
         if(tp)tp.style.opacity=active&&tp===active.it.tip?'.92':'0';
@@ -1444,7 +1449,7 @@ body.is-static .greet-tip{display:none}
       }
       if(t>D+HOLD){
         const op=Math.max(0,1-(t-D-HOLD)/FADE);
-        svgs.forEach(s=>{s.style.opacity=String(op)});
+        svgs.forEach(s=>{s.style.opacity=String(op*BASE)});
       }
     };
     const frame=now=>{
