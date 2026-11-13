@@ -91,7 +91,7 @@ body.is-ready .spotlight{opacity:1}
 /* ============ header ============ */
 .top{
   position:fixed;left:0;right:0;top:0;z-index:50;
-  display:flex;align-items:flex-start;justify-content:space-between;
+  display:flex;align-items:flex-start;justify-content:flex-end;
   padding:26px clamp(20px,3.2vw,44px);
   pointer-events:none;
 }
@@ -102,11 +102,10 @@ body.is-ready .spotlight{opacity:1}
 }
 .top.scrolled::before{opacity:1}
 .top>*{pointer-events:auto}
-.brand{display:flex;align-items:center;gap:12px;line-height:1}
 .brand-word{font-family:var(--sans);font-weight:700;font-size:25px;letter-spacing:-.01em;line-height:1}
 .brand-word em{font-style:normal;color:var(--accent)}
 
-.status{display:flex;align-items:center;gap:22px;margin-top:9px}
+.status{position:absolute;left:50%;top:35px;transform:translateX(-50%);display:flex;align-items:center;gap:22px}
 .pill{display:flex;align-items:center;gap:9px;font-size:10.5px;letter-spacing:.13em;color:rgba(242,239,232,.72);text-transform:uppercase;white-space:nowrap}
 .dot{width:5px;height:5px;border-radius:50%;background:#9ee6a9;box-shadow:0 0 0 0 rgba(158,230,169,.55);animation:pulse 2.6s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(158,230,169,.5)}70%{box-shadow:0 0 0 7px rgba(158,230,169,0)}100%{box-shadow:0 0 0 0 rgba(158,230,169,0)}}
@@ -738,7 +737,6 @@ body.is-static .thought-feature::after,body.is-static .thought-card::after{anima
   .status,.nav{display:none}
   .top{padding:18px 20px;align-items:center}
   .top::before{height:96px;background:linear-gradient(to bottom,rgba(7,7,7,.99),rgba(7,7,7,.9) 58%,rgba(7,7,7,.4) 84%,transparent)}
-  .brand-word{font-size:23px}
   .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;padding:96px 20px 0}
   .hero-grid{display:contents}
   .copy{position:relative;left:auto;bottom:auto;max-width:none;order:1}
@@ -864,10 +862,6 @@ body.is-static .greet-tip{display:none}
 <div class="progress" aria-hidden="true"></div>
 
 <header class="top">
-  <a class="brand" href="#top" aria-label="回到顶部">
-    <span class="brand-word">kiaki<em>.</em></span>
-  </a>
-
   <div class="status">
     <span class="pill"><i class="dot"></i>开放交流 · 欢迎来聊 AI 产品</span>
     <span class="pill-div"></span>
