@@ -791,8 +791,12 @@ body.is-static .thought-feature::after,body.is-static .thought-card::after{anima
   .job-body{display:block;height:0;overflow:hidden;opacity:0;
     transition:height .46s cubic-bezier(.22,.61,.36,1),opacity .3s ease}
   .job.is-open .job-body{opacity:1}
-  .job-cta{display:inline-flex;align-items:center;gap:9px;margin-top:18px;
-    padding:7px 13px 7px 14px;border-radius:999px;
+  .job-summary{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px}
+  .job-summary h3{grid-column:1/-1;margin-bottom:8px}
+  .job-company{grid-column:1;margin:0}
+  .job-body{grid-column:1/-1}
+  .job-cta{grid-column:2;justify-self:end;display:inline-flex;align-items:center;gap:9px;margin:0;
+    padding:6px 12px 6px 13px;border-radius:999px;
     border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);
     font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,239,232,.6);
     transition:background .4s ease,border-color .4s ease,color .4s ease}
